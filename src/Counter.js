@@ -1,33 +1,43 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { increment, decrement, redo, undo } from './ducks/counter';
+import { getPeople } from './ducks/peopleReducer';
 
 class Counter extends Component {
+  componentDidMount() {
+    this.props.getPeople();
+  }
   render() {
+    console.log(this.props);
     return (
       <div className="app">
         <section className="counter">
-          <h1 className="counter__current-value">{0}</h1>
+          <h1 className="counter__current-value">{this.props.currentValue}</h1>
           <div className="counter__button-wrapper">
             <button
               className="counter__button increment-one"
-              onClick={() => null}
+              onClick={() => this.props.increment(1)}
             >
               +1
             </button>
             <button
               className="counter__button increment-five"
-              onClick={() => null}
+              onClick={() => this.props.increment(5)}
             >
               +5
             </button>
             <button
+            //this is wrong
               className="counter__button decrement-one"
-              onClick={() => null}
+              onClick={() => this.props.decrement(1)}
             >
               -1
             </button>
             <button
+            //this is wrong
               className="counter__button decrement-five"
-              onClick={() => null}
+              onClick={() => this.props.decrement(5)}
             >
               -5
             </button>
@@ -56,4 +66,11 @@ class Counter extends Component {
   }
 }
 
-export default Counter;
+const mapStateToProps = state => state;
+
+// Connect is decorating our counter component with the state from the redux store with mapStateToProps
+// Connect is nested underneath Provider
+export default connect(
+  mapStateToProps,
+  { increment, decrement, redo, undo, getPeople }
+  )(Counter);
